@@ -43,7 +43,7 @@ public class SearchEngine
 				System.out.println("Remove a link");
 				break;
 			case "P":
-				System.out.println("Print the graph");
+				printTheGraph();
 				break;
 			case "S":
 				System.out.println("Search for pages with a keyword");
@@ -59,6 +59,18 @@ public class SearchEngine
 		} while (!selection.equals("Q"));
 		
 		System.out.println("\nGoodbye.");
+	}
+
+	private static void printTheGraph() 
+	{
+		System.out.println();
+		System.out.println("    (I) Sort based on index (ASC)");
+		System.out.println("    (U) Sort based on URL (ASC)");
+		System.out.println("    (R) Sort based on rank (DSC)");
+		System.out.println();
+		System.out.print("Please select an option: ");
+		
+		String option = getSelection();
 	}
 
 	private static String getSelection() 
