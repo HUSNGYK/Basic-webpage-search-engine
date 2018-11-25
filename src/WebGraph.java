@@ -15,9 +15,14 @@ public class WebGraph
 	public static final int MAX_PAGES = 40;
 	
 	private static Collection<WebPage> pages = new ArrayList<WebPage>();
-	private int[][] edges = new int[MAX_PAGES][MAX_PAGES];
+	private static int[][] edges = new int[MAX_PAGES][MAX_PAGES];
 	
 	public WebGraph() {}
+	public WebGraph(Collection<WebPage> pages, int[][] edges)
+	{
+		this.pages = pages;
+		this.edges = edges;
+	}
 	
 	public static WebGraph buildFromFiles(String pagesFile, String linksFile)
 	throws IllegalArgumentException, FileNotFoundException, IOException
@@ -55,21 +60,15 @@ public class WebGraph
 		InputStreamReader linksInStream = new InputStreamReader(linksIn);
 		BufferedReader linksReader = new BufferedReader(linksInStream);
 		
-		Iterator<WebPage> iterator = pages.iterator();
-		
 		String line = linksReader.readLine();
 		String source;
 		String destination;
 		while(line != (null))
 		{
 			source = line.substring(0, line.indexOf(" "));
-			destination = line.substring(line.indexOf(" "), line.length());
-
-			if(pages.isEmpty())
-				//TODO: do something if pages didn't read anything
-				return null;
+			destination = line.substring(line.indexOf(" ") + 1, line.length());
 			
-			
+			buildEdges(source, destination);
 			
 			try {
 				line = linksReader.readLine();
@@ -77,10 +76,35 @@ public class WebGraph
 				break;
 			}
 		}
-		
-		
-		return null;		
+		return new WebGraph(pages, edges);		
 	}
+	private static void TEST_printEdges()
+	{
+		for(int i = 0; i < pages.size(); i++)
+		{
+			for(int j = 0; j < pages.size(); j++)
+			{
+				System.out.print(edges[i][j] + " ");
+			}
+			System.out.println();
+		}
+	}
+	private static void buildEdges(String source, String destination) 
+	{
+		WebPage[] all = (WebPage[]) pages.toArray(new WebPage[pages.size()]);
+		for(int srcIndex = 0; srcIndex < all.length; srcIndex++) 
+		{
+			if(all[srcIndex].URL().equals(source))
+			{
+				for(int dstIndex = 0; dstIndex < all.length; dstIndex++)
+				{
+					if(all[dstIndex].URL().equals(destination))
+						edges[srcIndex][dstIndex] = 1;
+				}
+			}
+		}
+	}
+
 	public void addPage(String url, Collection<String> keywords)
 	throws IllegalArgumentException
 	{
