@@ -61,7 +61,6 @@ public class WebGraph
 		{
 			source = line.substring(0, line.indexOf(" "));
 			destination = line.substring(line.indexOf(" "), line.length());
-			
 			if(keywords.contains(null))			
 			line = pagesReader.readLine();
 		}
