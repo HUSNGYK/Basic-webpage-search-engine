@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -18,13 +20,22 @@ public class SearchEngine
 	public static void main(String[] args)
 	{
 		System.out.println("Loading WebGraph data...");
-		//TODO: load webgraph data
 		
+		WebGraph graph = new WebGraph();
+		try 
+		{
+			graph.buildFromFiles("pages.txt", "links.txt");
+			System.out.println("Success!");
+		} 
+		catch (IOException e) 
+		{
+			//TODO: implement all relevent catches
+		}		
 		
-		printMenu();
 		String selection;
 		do
 		{
+			printMenu();
 			System.out.print("\nPlease select an option: ");
 			selection = getSelection();
 			
@@ -83,6 +94,7 @@ public class SearchEngine
 
 	private static void printMenu() 
 	{
+		System.out.println();
 		System.out.println("Menu:");
 		System.out.println("    (AP) - Add new page to the graph.");
 		System.out.println("    (RP) - Remove a page from the graph.");

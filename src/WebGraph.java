@@ -1,4 +1,11 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 //Mike Kennedy
 //108715992
@@ -7,16 +14,97 @@ public class WebGraph
 {
 	public static final int MAX_PAGES = 40;
 	
-	private Collection<WebPage> pages;
-	private int[][] edges = new int[MAX_PAGES][MAX_PAGES];
+	private static Collection<WebPage> pages = new ArrayList<WebPage>();
+	private static int[][] edges = new int[MAX_PAGES][MAX_PAGES];
 	
 	public WebGraph() {}
+	public WebGraph(Collection<WebPage> pages, int[][] edges)
+	{
+		this.pages = pages;
+		this.edges = edges;
+	}
 	
 	public static WebGraph buildFromFiles(String pagesFile, String linksFile)
-	throws IllegalArgumentException	//TODO: throw exception if file does not reference valid file
-	{
-		return null;		
+	throws IllegalArgumentException, FileNotFoundException, IOException
+	//TODO: throw exception if file does not reference valid file
+	//TODO: throw fileNotFoundException if file doesn't exist
+	//TODO: throw IOException if file is empty
+	{	
+		//Setup webpage collection
+		FileInputStream pagesIn = new FileInputStream(pagesFile);
+		InputStreamReader pagesInStream = new InputStreamReader(pagesIn);
+		BufferedReader pagesReader = new BufferedReader(pagesInStream);
+		
+		String currentLine[] = pagesReader.readLine().split("\\s+");
+		String url;
+		int rank;
+		int index = 0;
+		Collection<String> keywords = new ArrayList<String>();
+		
+		while(!currentLine.equals(null))
+		{
+			url = currentLine[0];
+			for(int i = 1; i < currentLine.length; i++)
+				keywords.add(currentLine[i]);
+			rank = 0;	//TODO: get rank from somewhere
+			pages.add(new WebPage(url, index++, rank, keywords));
+			try {
+				currentLine = pagesReader.readLine().split("\\s+");
+			} catch (Exception e){
+				break;//break if there are no more lines
+			}
+		}
+		
+		//Populate graph with links
+		FileInputStream linksIn = new FileInputStream(linksFile);
+		InputStreamReader linksInStream = new InputStreamReader(linksIn);
+		BufferedReader linksReader = new BufferedReader(linksInStream);
+		
+		String line = linksReader.readLine();
+		String source;
+		String destination;
+		while(line != (null))
+		{
+			source = line.substring(0, line.indexOf(" "));
+			destination = line.substring(line.indexOf(" ") + 1, line.length());
+			
+			buildEdges(source, destination);
+			
+			try {
+				line = linksReader.readLine();
+			} catch (Exception e) {
+				break;
+			}
+		}
+		return new WebGraph(pages, edges);		
 	}
+	private static void TEST_printEdges()
+	{
+		for(int i = 0; i < pages.size(); i++)
+		{
+			for(int j = 0; j < pages.size(); j++)
+			{
+				System.out.print(edges[i][j] + " ");
+			}
+			System.out.println();
+		}
+	}
+	private static void buildEdges(String source, String destination) 
+	{
+		WebPage[] all = (WebPage[]) pages.toArray(new WebPage[pages.size()]);
+		for(int srcIndex = 0; srcIndex < all.length; srcIndex++) 
+		{
+			if(all[srcIndex].URL().equals(source))
+			{
+				for(int dstIndex = 0; dstIndex < all.length; dstIndex++)
+				{
+					if(all[dstIndex].URL().equals(destination))
+						edges[srcIndex][dstIndex] = 1;
+				}
+			}
+		}
+	}
+
 	public void addPage(String url, Collection<String> keywords)
 	throws IllegalArgumentException
 	{
