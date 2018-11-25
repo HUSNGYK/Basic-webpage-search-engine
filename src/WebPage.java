@@ -25,7 +25,15 @@ public class WebPage implements Comparable
 	
 	public String URL()
 	{
-		return url;
+		return this.url;
+	}
+	public int rank()
+	{
+		return this.rank;
+	}
+	public int index()
+	{
+		return this.index;
 	}
 	public String toString() 
 	{
