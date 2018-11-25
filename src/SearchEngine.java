@@ -13,23 +13,27 @@ public class SearchEngine
 	public static final String PAGES_FILE = "pages.txt";
 	public static final String LINKS_FILE = "links.txt";
 	
-	private WebGraph web;
+	public static WebGraph web;
 	
-	public SearchEngine() {}
+	public SearchEngine() 
+	{
+		web = new WebGraph();
+	}
 	
 	public static void main(String[] args)
 	{
 		System.out.println("Loading WebGraph data...");
-		
-		WebGraph graph = new WebGraph();
 		try 
 		{
-			graph.buildFromFiles("pages.txt", "links.txt");
+			WebGraph newGraph = new WebGraph();
+			newGraph.buildFromFiles("pages.txt", "links.txt");
+			web = newGraph;
 			System.out.println("Success!");
 		} 
 		catch (IOException e) 
 		{
-			//TODO: implement all relevent catches
+			System.out.println("Unable to load WebGraph.  Terminating.");
+			return;
 		}		
 		
 		String selection;
@@ -84,6 +88,7 @@ public class SearchEngine
 		switch(option)
 		{
 		case "I":
+			web.sortByIndex();
 			System.out.println("Sort based on index");
 			break;
 		case "U":

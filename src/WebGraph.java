@@ -5,19 +5,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 //Mike Kennedy
 //108715992
 
-public class WebGraph 
+public class WebGraph
 {
 	public static final int MAX_PAGES = 40;
 	
-	private static Collection<WebPage> pages = new ArrayList<WebPage>();
-	private static int[][] edges = new int[MAX_PAGES][MAX_PAGES];
+	private static Collection<WebPage> pages;
+	private static int[][] edges;
 	
-	public WebGraph() {}
+	public WebGraph() 
+	{
+		pages = new ArrayList<WebPage>();
+		edges = new int[MAX_PAGES][MAX_PAGES];
+	}
 	public WebGraph(Collection<WebPage> pages, int[][] edges)
 	{
 		this.pages = pages;
@@ -130,6 +136,11 @@ public class WebGraph
 	public void printTable()
 	{
 		
+	}
+	public void sortByIndex()
+	{
+		Collections.sort((ArrayList) pages, new IndexComparator());
+		System.out.println("First INDEX: " + pages.toArray()[0]);
 	}
 
 }

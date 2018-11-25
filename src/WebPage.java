@@ -42,8 +42,13 @@ public class WebPage implements Comparable
 	
 	@Override
 	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+		WebPage other = (WebPage) o;
+		if(this.rank == other.rank)
+			return 0;
+		else if(this.rank > other.rank)
+			return 1;
+		else
+			return -1;
 	}
 
 }
