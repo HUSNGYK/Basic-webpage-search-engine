@@ -98,8 +98,9 @@ public class SearchEngine
 			break;
 		default:
 			System.out.println("Selection not recognized.");
-			break;
+			return;
 		}
+		web.printTable();
 	}
 
 	private static String getSelection() 

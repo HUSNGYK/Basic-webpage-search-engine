@@ -135,7 +135,7 @@ public class WebGraph
 	}
 	public void printTable()
 	{
-		
+		System.out.println("Here it shall go");
 	}
 	public void sortByIndex()
 	{
