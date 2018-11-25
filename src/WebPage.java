@@ -7,7 +7,7 @@ import java.util.Collection;
  * -represents a hyperlinked document
  */
 
-public class WebPage 
+public class WebPage implements Comparable
 {
 	private String url;
 	private int index;
@@ -30,6 +30,12 @@ public class WebPage
 	public String toString() 
 	{
 		return "";
+	}
+	
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

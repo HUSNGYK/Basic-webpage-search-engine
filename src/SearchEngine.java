@@ -60,16 +60,14 @@ public class SearchEngine
 				System.out.println("Search for pages with a keyword");
 				break;
 			case "Q":
-				System.out.println("Quit");
-				break;
+				System.out.println("\nGoodbye.");
+				return;
 			default:
 				System.out.println("Invalid selection, please try again.");
 				break;
 			}
 			
-		} while (!selection.equals("Q"));
-		
-		System.out.println("\nGoodbye.");
+		} while (true);
 	}
 
 	private static void printTheGraph() 
@@ -82,6 +80,22 @@ public class SearchEngine
 		System.out.print("Please select an option: ");
 		
 		String option = getSelection();
+		
+		switch(option)
+		{
+		case "I":
+			System.out.println("Sort based on index");
+			break;
+		case "U":
+			System.out.println("Based on url");
+			break;
+		case "R":
+			System.out.println("Based on rank");
+			break;
+		default:
+			System.out.println("Selection not recognized.");
+			break;
+		}
 	}
 
 	private static String getSelection() 
