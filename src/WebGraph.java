@@ -135,7 +135,32 @@ public class WebGraph
 	}
 	public void printTable()
 	{
-		System.out.println("Here it shall go");
+		String format = "\n%1$-10s%2$-18s%3$-12s%4$-20s%5$-20s\n";
+		System.out.format(format, "Index", "URL", "Page Rank", "Links", "Keywords");
+		System.out.println("-------------------------------------------------------------------------------------------------------------");
+		format = "   %1$-3s| %2$-19s|    %3$-6s| %4$-18s| %5$-20s\n";
+		
+		ArrayList printable = (ArrayList) pages;
+		
+		WebPage current = new WebPage();
+		Iterator<WebPage> iterator = pages.iterator();
+		
+		int index;
+		String url;
+		int rank;
+		String links;
+		String keywords;
+		while(iterator.hasNext())
+		{
+			current = iterator.next();
+			index = current.index();
+			url = current.URL();
+			rank = current.rank();
+			links = "not finished";
+			keywords = "not done yet";
+			System.out.format(format, index, url, rank, links, keywords);
+		}
+		
 	}
 	public void sortByIndex()
 	{
