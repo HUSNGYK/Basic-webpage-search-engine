@@ -13,7 +13,7 @@ public class WebGraph
 {
 	public static final int MAX_PAGES = 40;
 	
-	private static Collection<WebPage> pages;
+	private static Collection<WebPage> pages = new ArrayList<WebPage>();
 	private int[][] edges = new int[MAX_PAGES][MAX_PAGES];
 	
 	public WebGraph() {}
@@ -45,7 +45,7 @@ public class WebGraph
 			try {
 				currentLine = pagesReader.readLine().split("\\s+");
 			} catch (Exception e){
-				break;//break if there areno more lines
+				break;//break if there are no more lines
 			}
 		}
 		
@@ -57,14 +57,19 @@ public class WebGraph
 		String line = linksReader.readLine();
 		String source;
 		String destination;
-		while(!currentLine.equals(null))
+		while(line != (null))
 		{
 			source = line.substring(0, line.indexOf(" "));
+			System.out.println("Source: " + source);
 			destination = line.substring(line.indexOf(" "), line.length());
-			if(keywords.contains(null))			
-			line = pagesReader.readLine();
+			System.out.println("Destination: " + destination);
+//			if(keywords.contains(null))		
+			try {
+				line = linksReader.readLine();
+			} catch (Exception e) {
+				break;
+			}
 		}
-		
 		
 		
 		return null;		
