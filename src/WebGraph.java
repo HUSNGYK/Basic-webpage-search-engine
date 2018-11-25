@@ -140,7 +140,14 @@ public class WebGraph
 	public void sortByIndex()
 	{
 		Collections.sort((ArrayList) pages, new IndexComparator());
-		System.out.println("First INDEX: " + pages.toArray()[0]);
+	}
+	public void sortByURL()
+	{		
+		Collections.sort((ArrayList) pages, new URLComparator());
+	}
+	public void sortByRank()
+	{
+		Collections.sort((ArrayList) pages, new RankComparator());
 	}
 
 }

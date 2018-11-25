@@ -89,13 +89,12 @@ public class SearchEngine
 		{
 		case "I":
 			web.sortByIndex();
-			System.out.println("Sort based on index");
 			break;
 		case "U":
-			System.out.println("Based on url");
+			web.sortByURL();
 			break;
 		case "R":
-			System.out.println("Based on rank");
+			web.sortByRank();
 			break;
 		default:
 			System.out.println("Selection not recognized.");
