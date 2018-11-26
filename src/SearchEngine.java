@@ -1,5 +1,8 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -61,7 +64,9 @@ public class SearchEngine
 				printTheGraph();
 				break;
 			case "S":
-				System.out.println("Search for pages with a keyword");
+				System.out.print("Search keyword: ");
+				String key = s.nextLine();
+				Search(key);
 				break;
 			case "Q":
 				System.out.println("\nGoodbye.");
@@ -72,6 +77,41 @@ public class SearchEngine
 			}
 			
 		} while (true);
+	}
+
+	private static void Search(String key) 
+	{
+		Collection<WebPage> hasKeyword = web.pageContains(key);
+		if(hasKeyword.isEmpty())
+			System.out.println("No pages found containing keyword: \"" + key + "\"");
+		else
+		{
+			printSearchTable(hasKeyword, key);
+		}
+	}
+
+	private static void printSearchTable(Collection<WebPage> hasKeyword, String key) 
+	{
+		String format = "\n%1$-8s%2$-12s%3$-12s\n";
+		System.out.format(format, "Rank", "Page Rank", "URL");
+		System.out.println("---------------------------------------------");
+		format = "  %1$-4s|    %2$-7s| %3$-20s\n";
+		
+		ArrayList printable = (ArrayList) hasKeyword;
+		
+		WebPage currentPage = new WebPage();
+		Iterator<WebPage> iterator = hasKeyword.iterator();		
+		
+		String url;
+		int rank;
+		int list = 1;
+		while(iterator.hasNext())
+		{
+			currentPage = iterator.next();
+			url = currentPage.URL();
+			rank = currentPage.rank();
+			System.out.format(format, list++, rank, url);
+		}
 	}
 
 	private static void printTheGraph() 

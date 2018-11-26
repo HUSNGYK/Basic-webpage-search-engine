@@ -198,5 +198,25 @@ public class WebGraph
 	{
 		Collections.sort((ArrayList) pages, new RankComparator());
 	}
+	public Collection<WebPage> pageContains(String keyword)
+	{
+		Collection<WebPage> collection = new ArrayList<WebPage>();
+		
+		WebPage find;
+		Iterator pageIterator = pages.iterator();
+		String Single;
+		
+		for(int i = 0; i < pages.size(); i++)
+		{
+			find = (WebPage) pageIterator.next();
+			Single = keywordsToString(find);
+			if(Single.contains(keyword))
+			{
+				collection.add(find);
+			}
+		}
+		
+		return collection;
+	}
 
 }
