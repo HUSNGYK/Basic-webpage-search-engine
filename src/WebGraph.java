@@ -116,6 +116,16 @@ public class WebGraph
 	public void addPage(String url, Collection<String> keywords)
 	throws IllegalArgumentException
 	{
+		//Make sure page doesn't already exist in graph
+		try
+		{
+			WebPage page = findPage(url);
+			throw new IllegalArgumentException();
+		} catch (IllegalArgumentException e) {}
+		
+		int rank = 0;	//TODO: figure out rank
+		
+		pages.add(new WebPage(url, pages.size(), rank, keywords));
 		
 	}
 	public void addLink(String source, String destination)

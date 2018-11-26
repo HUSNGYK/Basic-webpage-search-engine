@@ -82,9 +82,23 @@ public class SearchEngine
 	private static void addPage() 
 	{
 		System.out.print("Enter a URL: ");
-		String url = s.next();
+		String url = s.nextLine();
 		System.out.print("Enter keywords (space - separated): ");
-		String keywords = s.next();
+		String keys = s.nextLine();
+		String[] keysArray = keys.split(" ");
+		Collection<String> keywords = new ArrayList<String>();
+		for(int i = 0; i < keysArray.length; i++)
+		{
+			keywords.add(keysArray[i]);
+		} 
+		
+		try
+		{
+			web.addPage(url, keywords);
+			System.out.println("\n" + url + " successfully added to the WebGraph!");
+		} catch (IllegalArgumentException e){
+			System.out.println("Unable to add page to graph");
+		}
 	}
 
 	private static void addLink() 
