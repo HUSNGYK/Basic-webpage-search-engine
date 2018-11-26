@@ -166,9 +166,17 @@ public class WebGraph
 	}
 	private String linksToString(WebPage current) 
 	{
-		
-		
-		return null;
+		int index = current.index();
+		String links = "";
+		for(int i = 0; i < edges.length; i++)
+		{
+			if(edges[index][i] == 1)
+				links += i + ", ";
+		}
+		//Eliminates trailing comma
+		if(links.length() <= 3)
+			return links.substring(0, 1);
+		return links.substring(0, links.length() - 2);
 	}
 	private String keywordsToString(WebPage page) 
 	{		
