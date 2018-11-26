@@ -160,6 +160,15 @@ public class WebGraph
 			edges[sourceIndex][i] = 0;
 		}
 		pages.remove(removePage);
+		//Update index
+		Iterator iterator = pages.iterator();
+		WebPage page;
+		while(iterator.hasNext())
+		{
+			page = (WebPage) iterator.next();
+			if(page.index() >= sourceIndex)
+				page.setIndex(page.index() - 1);
+		}
 		
 	}
 	public void removeLink(String source, String destination)

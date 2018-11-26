@@ -23,6 +23,10 @@ public class WebPage implements Comparable
 		this.keywords = keywords;
 	}
 	
+	public void setIndex(int index)
+	{
+		this.index = index;
+	}
 	public void setRank(int rank)
 	{
 		this.rank = rank;
