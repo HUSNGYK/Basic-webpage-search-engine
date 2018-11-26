@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -44,7 +45,7 @@ public class SearchEngine
 		{
 			printMenu();
 			System.out.print("\nPlease select an option: ");
-			selection = getSelection();
+			selection = s.nextLine();
 			
 			switch(selection)
 			{
@@ -134,9 +135,19 @@ public class SearchEngine
 	private static void addLink() 
 	{
 		System.out.print("Enter a source URL: ");
-		String source = s.nextLine();	//TODO: detect bad/not links
+		String source = s.nextLine();
+		if(!isValidURL(source))
+		{
+			System.out.println("Invalid URL.");
+			return;
+		}
 		System.out.print("Enter a destination URL: ");
 		String destination = s.nextLine();
+		if(!isValidURL(destination))
+		{
+			System.out.println("Invalid URL.");
+			return;
+		}
 		try
 		{
 			web.addLink(source, destination);
@@ -145,6 +156,18 @@ public class SearchEngine
 		{
 			System.out.println("Link addition failed.");
 		}
+	}
+
+	private static Boolean isValidURL(String urlString) 
+	{
+		try
+		{
+			URL url = new URL(urlString);
+			return true;
+		} catch (Exception e)
+		{
+			return false;
+		}		
 	}
 
 	private static void Search(String key) 
@@ -191,7 +214,7 @@ public class SearchEngine
 		System.out.println();
 		System.out.print("Please select an option: ");
 		
-		String option = getSelection();
+		String option = s.nextLine();
 		
 		switch(option)
 		{
@@ -209,14 +232,6 @@ public class SearchEngine
 			return;
 		}
 		web.printTable();
-	}
-
-	private static String getSelection() 
-	{
-		String option;
-		option = s.nextLine();
-		//TODO: catch dumb inputs
-		return option;
 	}
 
 	private static void printMenu() 
