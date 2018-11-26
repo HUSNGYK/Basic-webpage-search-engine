@@ -52,13 +52,13 @@ public class SearchEngine
 				addPage();
 				break;
 			case "RP":
-				System.out.println("Remove a page from the graph.");
+				removePage();
 				break;
 			case "AL":
 				addLink();
 				break;
 			case "RL":
-				System.out.println("Remove a link");
+				removeLink();
 				break;
 			case "P":
 				printTheGraph();
@@ -77,6 +77,36 @@ public class SearchEngine
 			}
 			
 		} while (true);
+	}
+
+	private static void removeLink() 
+	{
+		System.out.print("Enter a source URL: ");
+		String source = s.nextLine();
+		System.out.print("Enter a destination URL: ");
+		String destination = s.nextLine();
+		try
+		{
+			web.removeLink(source, destination);
+			System.out.println("\nLink removed from " + source + " to " + destination + "!");
+		} catch (IllegalArgumentException e) {
+			System.out.println("Error encountered.  Link was not removed.");
+		}
+		
+	}
+
+	private static void removePage() 
+	{
+		System.out.print("Enter a URL: ");
+		String url = s.next();
+		
+		try
+		{
+			web.removePage(url);
+			System.out.println("\n" + url + " has been removed from the graph!\n");
+		} catch (IllegalArgumentException e) {
+			System.out.println("Error encountered. \"" + url + "\" not removed.");
+		}
 	}
 
 	private static void addPage() 

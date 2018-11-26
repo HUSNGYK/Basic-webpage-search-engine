@@ -152,12 +152,27 @@ public class WebGraph
 		throw new IllegalArgumentException();
 	}
 	public void removePage(String url)
+	throws IllegalArgumentException
+	//TODO: links updated, update index
 	{
+		WebPage removePage = findPage(url);		
+		int sourceIndex = removePage.index();
+		for(int i = 0; i < edges.length; i++) 
+		{
+			edges[sourceIndex][i] = 0;
+		}
+		pages.remove(removePage);
 		
 	}
 	public void removeLink(String source, String destination)
+	throws IllegalArgumentException
 	{
+		WebPage removeLink = findPage(source);
+		int sourceIndex = removeLink.index();
+		removeLink = findPage(destination);
+		int destinationIndex = removeLink.index();
 		
+		edges[sourceIndex][destinationIndex] = 0;
 	}
 	public void updatePageRanks()
 	{
