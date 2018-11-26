@@ -49,13 +49,13 @@ public class SearchEngine
 			switch(selection)
 			{
 			case "AP":
-				System.out.println("Add a new page to the graph.");
+				addPage();
 				break;
 			case "RP":
 				System.out.println("Remove a page from the graph.");
 				break;
 			case "AL":
-				System.out.println("Add a link between pages");
+				addLink();
 				break;
 			case "RL":
 				System.out.println("Remove a link");
@@ -77,6 +77,30 @@ public class SearchEngine
 			}
 			
 		} while (true);
+	}
+
+	private static void addPage() 
+	{
+		System.out.print("Enter a URL: ");
+		String url = s.next();
+		System.out.print("Enter keywords (space - separated): ");
+		String keywords = s.next();
+	}
+
+	private static void addLink() 
+	{
+		System.out.print("Enter a source URL: ");
+		String source = s.nextLine();	//TODO: detect bad/not links
+		System.out.print("Enter a destination URL: ");
+		String destination = s.nextLine();
+		try
+		{
+			web.addLink(source, destination);
+			System.out.println("\nLink successfully added from " + source + " to " + destination + "!\n");
+		} catch (IllegalArgumentException illex)
+		{
+			System.out.println("Link addition failed.");
+		}
 	}
 
 	private static void Search(String key) 

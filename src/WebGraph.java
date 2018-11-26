@@ -120,8 +120,26 @@ public class WebGraph
 	}
 	public void addLink(String source, String destination)
 	throws IllegalArgumentException
-	{
+	{		
+		WebPage page = findPage(source);
+		int sourceIndex = page.index();
+		page = findPage(destination);
+		int destinationIndex = page.index();
 		
+		edges[sourceIndex][destinationIndex] = 1;
+	}
+	private WebPage findPage(String url) 
+	throws IllegalArgumentException
+	{
+		Iterator iterator = pages.iterator();
+		WebPage find;
+		for(int i = 0;i < pages.size(); i++)
+		{
+			find = (WebPage) iterator.next();			
+			if(find.URL().equals(url))
+				return find;
+		}
+		throw new IllegalArgumentException();
 	}
 	public void removePage(String url)
 	{
@@ -167,21 +185,24 @@ public class WebGraph
 	private String linksToString(WebPage current) 
 	{
 		int index = current.index();
-		String links = "";
+		Collection<String> links = new ArrayList<String>();
+		int k = 0;
 		for(int i = 0; i < edges.length; i++)
 		{
 			if(edges[index][i] == 1)
-				links += i + ", ";
+				links.add(i + "");
 		}
-		//Eliminates trailing comma
-		if(links.length() <= 3)
-			return links.substring(0, 1);
-		return links.substring(0, links.length() - 2);
+		//Return separated by commas
+		return links.stream()
+				.map(n -> String.valueOf(n))
+				.collect(Collectors.joining(", "));
 	}
 	private String keywordsToString(WebPage page) 
 	{		
 		Collection<String> collection = page.keywords();
 		Iterator i = collection.iterator();
+
+		//Return separated by commas
 		return collection.stream()
 				.map(n -> String.valueOf(n))
 				.collect(Collectors.joining(", "));
