@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //Mike Kennedy
 //108715992
@@ -45,11 +46,12 @@ public class WebGraph
 		String url;
 		int rank;
 		int index = 0;
-		Collection<String> keywords = new ArrayList<String>();
+		Collection<String> keywords;
 		
 		while(!currentLine.equals(null))
 		{
 			url = currentLine[0];
+			keywords = new ArrayList<String>();
 			for(int i = 1; i < currentLine.length; i++)
 				keywords.add(currentLine[i]);
 			rank = 0;	//TODO: get rank from somewhere
@@ -142,8 +144,8 @@ public class WebGraph
 		
 		ArrayList printable = (ArrayList) pages;
 		
-		WebPage current = new WebPage();
-		Iterator<WebPage> iterator = pages.iterator();
+		WebPage currentPage = new WebPage();
+		Iterator<WebPage> iterator = pages.iterator();		
 		
 		int index;
 		String url;
@@ -152,16 +154,30 @@ public class WebGraph
 		String keywords;
 		while(iterator.hasNext())
 		{
-			current = iterator.next();
-			index = current.index();
-			url = current.URL();
-			rank = current.rank();
-			links = "not finished";
-			keywords = "not done yet";
+			currentPage = iterator.next();
+			index = currentPage.index();
+			url = currentPage.URL();
+			rank = currentPage.rank();
+			links = linksToString(currentPage);
+			keywords = keywordsToString(currentPage);
 			System.out.format(format, index, url, rank, links, keywords);
 		}
 		
 	}
+	private String linksToString(WebPage current) 
+	{
+		
+		
+		return null;
+	}
+	private String keywordsToString(WebPage page) 
+	{		
+		Collection<String> collection = page.keywords();
+		Iterator i = collection.iterator();
+		return collection.stream()
+				.map(n -> String.valueOf(n))
+				.collect(Collectors.joining(", "));
+	}	
 	public void sortByIndex()
 	{
 		Collections.sort((ArrayList) pages, new IndexComparator());

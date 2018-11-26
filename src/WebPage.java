@@ -31,6 +31,10 @@ public class WebPage implements Comparable
 	{
 		return this.rank;
 	}
+	public Collection<String> keywords()
+	{
+		return this.keywords;
+	}
 	public int index()
 	{
 		return this.index;
