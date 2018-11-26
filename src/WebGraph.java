@@ -54,7 +54,7 @@ public class WebGraph
 			keywords = new ArrayList<String>();
 			for(int i = 1; i < currentLine.length; i++)
 				keywords.add(currentLine[i]);
-			rank = 0;	//TODO: get rank from somewhere
+			rank = 0;
 			pages.add(new WebPage(url, index++, rank, keywords));
 			try {
 				currentLine = pagesReader.readLine().split("\\s+");
@@ -123,9 +123,7 @@ public class WebGraph
 			throw new IllegalArgumentException();
 		} catch (IllegalArgumentException e) {}
 		
-		int rank = 0;	//TODO: figure out rank
-		
-		pages.add(new WebPage(url, pages.size(), rank, keywords));
+		pages.add(new WebPage(url, pages.size(), 0, keywords));
 		
 	}
 	public void addLink(String source, String destination)
@@ -176,7 +174,19 @@ public class WebGraph
 	}
 	public void updatePageRanks()
 	{
-		
+		Iterator iterator = pages.iterator();
+		WebPage current;
+		int index;
+		int rank;
+		for(int i = 0; i < pages.size(); i++)
+		{
+			rank = 0;
+			current = (WebPage) iterator.next();
+			index = current.index();
+			for(int row = 0; row < pages.size(); row++)
+				rank += edges[row][index];
+			current.setRank(rank);
+		}
 	}
 	public void printTable()
 	{

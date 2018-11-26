@@ -43,6 +43,7 @@ public class SearchEngine
 		String selection;
 		do
 		{
+			web.updatePageRanks();
 			printMenu();
 			System.out.print("\nPlease select an option: ");
 			selection = s.nextLine();
@@ -112,8 +113,14 @@ public class SearchEngine
 
 	private static void addPage() 
 	{
+		//TODO: catch duplicate pages
 		System.out.print("Enter a URL: ");
 		String url = s.nextLine();
+		if(!isValidURL(url))
+		{
+			System.out.println("Invalid URL.");
+			return;
+		}		
 		System.out.print("Enter keywords (space - separated): ");
 		String keys = s.nextLine();
 		String[] keysArray = keys.split(" ");
@@ -160,23 +167,19 @@ public class SearchEngine
 
 	private static Boolean isValidURL(String urlString) 
 	{
-		try
-		{
-			URL url = new URL(urlString);
-			return true;
-		} catch (Exception e)
-		{
+		if(urlString.contains(" ") || !urlString.contains("."))		
 			return false;
-		}		
+		return true;				
 	}
 
-	private static void Search(String key) 
+	private static void Search(String key) //TODO: sort search by rank
 	{
 		Collection<WebPage> hasKeyword = web.pageContains(key);
 		if(hasKeyword.isEmpty())
 			System.out.println("No pages found containing keyword: \"" + key + "\"");
 		else
 		{
+			web.sortByRank();
 			printSearchTable(hasKeyword, key);
 		}
 	}
@@ -207,6 +210,7 @@ public class SearchEngine
 
 	private static void printTheGraph() 
 	{
+		//TODO: sort by rank not working
 		System.out.println();
 		System.out.println("    (I) Sort based on index (ASC)");
 		System.out.println("    (U) Sort based on URL (ASC)");
