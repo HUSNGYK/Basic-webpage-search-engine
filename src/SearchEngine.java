@@ -100,7 +100,13 @@ public class SearchEngine
 	private static void removePage() 
 	{
 		System.out.print("Enter a URL: ");
-		String url = s.next();
+		String url = s.nextLine();
+		
+		if(!isValidURL(url))
+		{
+			System.out.println("\nInvalid URL.");
+			return;
+		}
 		
 		try
 		{
@@ -113,14 +119,13 @@ public class SearchEngine
 
 	private static void addPage() 
 	{
-		//TODO: catch duplicate pages
 		System.out.print("Enter a URL: ");
 		String url = s.nextLine();
 		if(!isValidURL(url))
 		{
 			System.out.println("Invalid URL.");
 			return;
-		}		
+		}
 		System.out.print("Enter keywords (space - separated): ");
 		String keys = s.nextLine();
 		String[] keysArray = keys.split(" ");
@@ -135,7 +140,7 @@ public class SearchEngine
 			web.addPage(url, keywords);
 			System.out.println("\n" + url + " successfully added to the WebGraph!");
 		} catch (IllegalArgumentException e){
-			System.out.println("Unable to add page to graph");
+			System.out.println("\nError: " + url + " already exists in  the WebGraph.  Could not add new WebPage.");
 		}
 	}
 
@@ -172,14 +177,14 @@ public class SearchEngine
 		return true;				
 	}
 
-	private static void Search(String key) //TODO: sort search by rank
+	private static void Search(String key)
 	{
+		web.sortByRank();
 		Collection<WebPage> hasKeyword = web.pageContains(key);
 		if(hasKeyword.isEmpty())
 			System.out.println("No pages found containing keyword: \"" + key + "\"");
 		else
 		{
-			web.sortByRank();
 			printSearchTable(hasKeyword, key);
 		}
 	}
@@ -210,7 +215,6 @@ public class SearchEngine
 
 	private static void printTheGraph() 
 	{
-		//TODO: sort by rank not working
 		System.out.println();
 		System.out.println("    (I) Sort based on index (ASC)");
 		System.out.println("    (U) Sort based on URL (ASC)");

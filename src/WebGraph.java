@@ -33,14 +33,14 @@ public class WebGraph
 	
 	public static WebGraph buildFromFiles(String pagesFile, String linksFile)
 	throws IllegalArgumentException, FileNotFoundException, IOException
-	//TODO: throw exception if file does not reference valid file
-	//TODO: throw fileNotFoundException if file doesn't exist
-	//TODO: throw IOException if file is empty
 	{	
 		//Setup webpage collection
 		FileInputStream pagesIn = new FileInputStream(pagesFile);
 		InputStreamReader pagesInStream = new InputStreamReader(pagesIn);
 		BufferedReader pagesReader = new BufferedReader(pagesInStream);
+		
+		if(pagesFile.isEmpty())
+			throw new IOException("File referenced is empty.");
 		
 		String currentLine[] = pagesReader.readLine().split("\\s+");
 		String url;
@@ -86,17 +86,6 @@ public class WebGraph
 		}
 		return new WebGraph(pages, edges);		
 	}
-	private static void TEST_printEdges()
-	{
-		for(int i = 0; i < pages.size(); i++)
-		{
-			for(int j = 0; j < pages.size(); j++)
-			{
-				System.out.print(edges[i][j] + " ");
-			}
-			System.out.println();
-		}
-	}
 	private static void buildEdges(String source, String destination) 
 	{
 		WebPage[] all = (WebPage[]) pages.toArray(new WebPage[pages.size()]);
@@ -117,11 +106,14 @@ public class WebGraph
 	throws IllegalArgumentException
 	{
 		//Make sure page doesn't already exist in graph
-		try
+		Iterator iterator = pages.iterator();
+		WebPage page;
+		for(int i = 0; i < pages.size(); i++)
 		{
-			WebPage page = findPage(url);
-			throw new IllegalArgumentException();
-		} catch (IllegalArgumentException e) {}
+			page = (WebPage) iterator.next();
+			if(page.URL().equals(url))
+				throw new IllegalArgumentException("Url already exists in page");
+		}
 		
 		pages.add(new WebPage(url, pages.size(), 0, keywords));
 		
@@ -151,15 +143,33 @@ public class WebGraph
 	}
 	public void removePage(String url)
 	throws IllegalArgumentException
-	//TODO: links updated, update index
 	{
+		//Update links
 		WebPage removePage = findPage(url);		
 		int sourceIndex = removePage.index();
-		for(int i = 0; i < edges.length; i++) 
+		Collection<WebPage> links = getRefs(removePage);
+		Iterator linkIterator = links.iterator();
+		WebPage update;
+		while(linkIterator.hasNext())
 		{
-			edges[sourceIndex][i] = 0;
+			update = (WebPage) linkIterator.next();
+			removeLink(update.URL(), url);
 		}
+		String before = "";
+		String after = "";
+		for(int row = 0; row < edges.length - 1; row++)
+		{
+			for(int col = 0; col < edges.length - 1; col++)
+			{
+				if(row >= sourceIndex)
+					edges[row][col] = edges[row + 1][col];
+				if(col >= sourceIndex)
+					edges[row][col] = edges[row][col + 1];
+			}
+		}
+		
 		pages.remove(removePage);
+		
 		//Update index
 		Iterator iterator = pages.iterator();
 		WebPage page;
@@ -170,6 +180,21 @@ public class WebGraph
 				page.setIndex(page.index() - 1);
 		}
 		
+	}
+	private Collection<WebPage> getRefs(WebPage source) 
+	{
+		Collection<WebPage> references = new ArrayList<>();
+		Iterator iterator = pages.iterator();
+		WebPage add;
+		for(int i = 0; i < pages.size(); i++)
+		{
+			add = (WebPage) iterator.next();
+			if(edges[source.index()][i] == 1)
+			{
+				references.add(add);
+			}
+		}		
+		return references;
 	}
 	public void removeLink(String source, String destination)
 	throws IllegalArgumentException
@@ -230,7 +255,6 @@ public class WebGraph
 	{
 		int index = current.index();
 		Collection<String> links = new ArrayList<String>();
-		int k = 0;
 		for(int i = 0; i < edges.length; i++)
 		{
 			if(edges[index][i] == 1)
@@ -244,8 +268,7 @@ public class WebGraph
 	private String keywordsToString(WebPage page) 
 	{		
 		Collection<String> collection = page.keywords();
-		Iterator i = collection.iterator();
-
+		
 		//Return separated by commas
 		return collection.stream()
 				.map(n -> String.valueOf(n))
@@ -253,15 +276,15 @@ public class WebGraph
 	}	
 	public void sortByIndex()
 	{
-		Collections.sort((ArrayList) pages, new IndexComparator());
+		Collections.sort((ArrayList<WebPage>) pages, new IndexComparator());
 	}
 	public void sortByURL()
 	{		
-		Collections.sort((ArrayList) pages, new URLComparator());
+		Collections.sort((ArrayList<WebPage>) pages, new URLComparator());
 	}
 	public void sortByRank()
 	{
-		Collections.sort((ArrayList) pages, new RankComparator());
+		Collections.sort((ArrayList<WebPage>) pages, new RankComparator());
 	}
 	public Collection<WebPage> pageContains(String keyword)
 	{
