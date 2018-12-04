@@ -10,6 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//Mike Kennedy
+//108715992
+
 public class WebGraph
 {
 	public static final int MAX_PAGES = 40;

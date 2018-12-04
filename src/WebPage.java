@@ -1,5 +1,8 @@
 import java.util.Collection;
 
+//Mike Kennedy
+//108715992
+
 /* Description:
  * -represents a hyperlinked document
  */
